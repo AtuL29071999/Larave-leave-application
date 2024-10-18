@@ -13,12 +13,26 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-container:hover {
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
         }
 
         .login-container h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
         }
+
 
         .form-control:focus {
             box-shadow: none;

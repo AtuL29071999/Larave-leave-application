@@ -44,7 +44,7 @@
     <div class="signup-container">
         <h2>Sign Up</h2>
         {{--  --}}
-        <form action="{{ $action }}" method="post">
+        <form action="{{ $action }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="image" class="form-label">Upload Picture</label>

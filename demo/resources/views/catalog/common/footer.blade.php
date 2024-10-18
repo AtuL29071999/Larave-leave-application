@@ -11,9 +11,8 @@
         <div class="col-md-4">
           <h5>Quick Links</h5>
           <ul class="list-unstyled">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
+            <li><a href="{{ route('catalog.home') }}">Home</a></li>
+            <li><a href="{{ route('catalog.about') }}">About</a></li>
             <li><a href="#">Contact</a></li>
           </ul>
         </div>
@@ -33,7 +32,7 @@
       <hr class="bg-light">
       <div class="row">
         <div class="col text-center">
-          <p class="mb-0">&copy; 2024 Your Company. All Rights Reserved.</p>
+          <p class="mb-0">&copy; 2024 Team1 Consulting PVT LTD. All Rights Reserved.</p>
         </div>
       </div>
     </div>

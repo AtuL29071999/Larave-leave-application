@@ -66,4 +66,4 @@ class LoginController extends Controller
     $request->session()->forget('userEmail' );
     return redirect()->route('catalog.login')->with('success', 'Logged out successfully.');
    }
-}
+} 

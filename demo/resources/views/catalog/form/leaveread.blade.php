@@ -2,9 +2,10 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1>Edit Leave Form</h1>
+    <h1>Read Leave Form</h1>
 
-    <form action="{{ route('catalog.update', $leave->id) }}" method="POST">
+    {{-- {{ route('catalog.approvel', $leave->id) }} --}}
+    <form action="" method="get">
         @csrf
         <div class="form-group">
             <label for="application">Application</label>
@@ -50,20 +51,20 @@
             <label for="contact">Contact</label>
             <input type="text" name="contact" class="form-control" value="{{ $leave->leave_contact_no }}">
         </div>
-
         <div class="form-group">
             <label for="medical_certificate">Medical Certificate</label>
             <input type="text" name="medical_certificate" class="form-control" value="{{ $leave->leave_medical_certificate }}">
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Update</button>
-    </form>
-    {{-- <form action="{{ route('catalog.delete', $forms->id) }}" method="POST">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger mt-3">Delete</button>
-    </form> --}}
+        @php
+            $unapproved = 0;
+            $approved = 1;
+            $rejected = 2;
+        @endphp
+        <a class="btn btn-success mt-3" href="{{ route('catalog.approvel', ['status' => $approved, 'leave_form_id' => $leave->id]) }}">Approved</a>
+        <a class="btn btn-warning mt-3" href="{{ route('catalog.approvel', ['status' => $unapproved, 'leave_form_id' => $leave->id]) }}">DisApproved</a>
+        <a class="btn btn-danger mt-3" href="{{ route('catalog.approvel', ['status' => $rejected, 'leave_form_id' => $leave->id]) }}">Rejected</a>
 
-    
+    </form>  
 </div>
 @endsection
 

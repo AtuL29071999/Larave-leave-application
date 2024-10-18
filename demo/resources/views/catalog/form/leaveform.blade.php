@@ -26,6 +26,59 @@
         .fontsize {
             font-size: 12px;
         }
+
+
+        /* <style> */
+        /* Basic structure for circular progress bars */
+        /* Circular chart container */
+        .circular-chart {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+        }
+
+        /* The background circle */
+        .circle-bg {
+            fill: none;
+            stroke: #e6e6e6;
+            stroke-width: 10;
+        }
+
+        /* The balance (green) and availed (orange) portions */
+        .circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .circle-balance {
+            stroke: #4caf50;
+            stroke-dasharray: 283;
+        }
+
+        .circle-progress {
+            stroke: #ff9800;
+            stroke-dasharray: 283;
+        }
+
+        /* Center the text inside the circle */
+        .percentage-text {
+            font-size: 1.5rem;
+            fill: #333;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            dominant-baseline: central;
+        }
+
+        /* Responsive title styling */
+        .chart-title {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
     </head>
 
@@ -50,8 +103,6 @@
                             <li><a href="javascript:void(0)" onclick="showSection('3')">Leave Balance</a></li>
                         </ul>
                     </aside>
-
-                    
                 </div>
                 <div class="col-12 col-sm-10 col-md-10">
                     <div class="container" id="contentArea">
@@ -60,7 +111,7 @@
                                 <h2>Leave Application</h2>
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <form action="{{ $action }}" method="post">
+                                        <form action="{{ $action }}" method="post" id="leaveForm">
                                             @csrf
                                             <div class="row mb-4">
                                                 <div class="col-10">
@@ -91,10 +142,17 @@
                                                         <label for="type">Type</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <select name="type" id="type" class="form-control">
-                                                            <option value="-select-">--Select--</option>
+                                                        <select name="type" id="application_type" class="form-control">
+                                                            <option value="">--Select--</option>
+                                                            <option value="Bereavement Leave">Bereavement Leave</option>
+                                                            <option value="Earned Leave">Earned Leave</option>
+                                                            <option value="Happiness Leave">Happiness Leave</option>
+                                                            <option value="Leave Without Pay">Leave Without Pay</option>
+                                                            <option value="Paternity Leave">Paternity Leave</option>
+                                                            <option value="Restricted Holiday">Restricted Holiday</option>
+                                                            <option value="Short Leave">Short Leave</option>
                                                             <option value="Sick Leave">Sick Leave</option>
-                                                            <option value="Emergency Leave">Emergency Leave</option>
+                                                            <option value="Wedding Leave">Wedding Leave</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -121,8 +179,8 @@
                                                         <input type="radio" name="halfday" value="First Half"> First Half
                                                         <input type="radio" name="halfday" value="Second Half"
                                                             class="ms-2"> Second Half
-                                                        <input type="radio" name="halfday" value="Both Half"
-                                                            class="ms-2"> Both Half
+                                                        {{-- <input type="radio" name="halfday" value="Both Half"
+                                                            class="ms-2"> Both Half --}}
                                                         <input type="radio" name="halfday" value="Full Day"
                                                             class="ms-2"> Full Day
                                                     </div>
@@ -134,7 +192,7 @@
                                                         <label for="days">Days</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input class="form-control" type="number" name="days"
+                                                        <input class="form-control" type="text" name="days"
                                                             id="days">
                                                     </div>
                                                 </div>
@@ -184,7 +242,7 @@
                                                 </div>
 
                                                 <!-- Contact Address -->
-                                                <div class="row mb-4">
+                                                {{-- <div class="row mb-4">
                                                     <div class="col-3 text-start">
                                                         <label for="contact_address">Contact Address</label>
                                                     </div>
@@ -199,10 +257,10 @@
                                                             name="contact_address3" id="contact_address3"
                                                             placeholder="Address Line 3">
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <!-- City -->
-                                                <div class="row mb-4">
+                                                {{-- <div class="row mb-4">
                                                     <div class="col-3 text-start">
                                                         <label for="city">City</label>
                                                     </div>
@@ -210,10 +268,10 @@
                                                         <input class="form-control mb-3" type="text" name="city"
                                                             id="city">
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <!-- PinCode -->
-                                                <div class="row mb-4">
+                                                {{-- <div class="row mb-4">
                                                     <div class="col-3 text-start">
                                                         <label for="pincode">PinCode</label>
                                                     </div>
@@ -221,7 +279,7 @@
                                                         <input class="form-control mb-3" type="number" name="pincode"
                                                             id="pincode">
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <!-- Medical Certificate -->
                                                 <div class="row mb-4">
@@ -253,31 +311,31 @@
                                                 </div>
                                             </div>
                                         </form>
-
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mt-5">
-                                            <h1 class="bg-dark text-white fs-4 p-2 mb-0">Selected Application Details</h1>
+                                            <h1 class="bg-dark text-white fs-4 p-2 mb-0" id="txt_heading">Selected
+                                                Application Details</h1>
                                             <table class="table table-bordered">
                                                 <tr>
                                                     <td>Balance</td>
-                                                    <td>0</td>
+                                                    <td id="txt_balance">0</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Availed till Date</td>
-                                                    <td>0</td>
+                                                    <td id="txt_avail_date">0</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Total Applied</td>
-                                                    <td>0</td>
+                                                    <td id="txt_total_applied">0</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Total Approved</td>
-                                                    <td>0</td>
+                                                    <td id="txt_total_approved">0</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Pending for Approval</td>
-                                                    <td>0</td>
+                                                    <td id="txt_pending">0</td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -352,25 +410,39 @@
                                                             <a href="{{ route('catalog.edit', $item['leave_form_id']) }}"><button
                                                                     class="btn1 " title="Edit"><i
                                                                         class="fa-regular fa-edit"></i></button></a>
-                                                            <a href="{{ route('catalog.delete', $item['leave_form_id']) }}"><button
+                                                            <a
+                                                                href="{{ route('catalog.delete', $item['leave_form_id']) }}"><button
                                                                     class="btn1  " title="Delete"><i
                                                                         class="fa-regular fa-trash-alt"></i></button></a>
                                                         </td>
                                                         <td class="col-2">{{ $item['emp_id'] }}</td>
-                                                        <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_apply_date'])) }}</td>
-                                                        <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_date_from'])) }}</td>
-                                                        <td class="col-2">{{ date('d-m-Y', strtotime( $item['leave_date_to']))}}</td>
+                                                        <td class="col-2">
+                                                            {{ date('d-m-Y', strtotime($item['leave_apply_date'])) }}</td>
+                                                        <td class="col-2">
+                                                            {{ date('d-m-Y', strtotime($item['leave_date_from'])) }}</td>
+                                                        <td class="col-2">
+                                                            {{ date('d-m-Y', strtotime($item['leave_date_to'])) }}</td>
                                                         <td class="col-2">{{ $item['leave_day'] }}</td>
-                                                        <td class="col-2">{{ $item['leave_application_type'] }}</td>
-                                                        <td class="col-2">{{ $item['leave_manager_email'] }}</td>
-                                                        <td class="col-2">{{ session('userName') }}</td>
+                                                        <td class="col-2">{{ $item['leave_type'] }}</td>
+                                                        <td class="col-2">{{ $item['approved_by'] }}</td>
+                                                        <td class="col-2">{{ $item['approved_by'] }}</td>
                                                         <td class="col-2">
                                                             @if ($item['approvel_status'] == 'Approved')
-                                                                <span class="text-success">{{ $item['approvel_status'] }}</span>
+                                                                <span
+                                                                    class="text-success">{{ $item['approvel_status'] }}</span>
                                                             @elseif ($item['approvel_status'] == 'Unapproved')
-                                                                <span class="text-warning">{{ $item['approvel_status'] }}</span>
+                                                                <span
+                                                                    class="text-warning">{{ $item['approvel_status'] }}</span>
                                                             @elseif ($item['approvel_status'] == 'Rejected')
-                                                                <span class="text-danger">{{ $item['approvel_status'] }}</span>
+                                                                <span
+                                                                    class="text-danger">{{ $item['approvel_status'] }}</span>
+                                                            @endif
+
+                                                            @if ($item['leave_read'] == 'R')
+                                                                <span
+                                                                    class="text-success">{{ $item['leave_read'] }}</span>
+                                                            @else
+                                                                <span class="text-danger">{{ $item['leave_read'] }}</span>
                                                             @endif
                                                         </td>
                                                         <td class="col-2">Regular</td>
@@ -384,12 +456,20 @@
                             </div>
                         </div>
                         <div id="3" class="tabs">
-                            <div class="w-100" style="height: 100vh" id="chartContainer"></div>
+                            <div style="display: flex">
+                                <div style="width: 300px; height: 300px"><canvas id="slChart"></canvas></div>
+                                <div style="width: 300px; height: 300px"><canvas id="elChart"></canvas></div>
+                                <div style="width: 300px; height: 300px"><canvas id="rhChart"></canvas></div>
+                            </div>
+                            <div class="w-100" style="height: 100vh">
+                                <div id="chartContainer"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
                 function showSection(id) {
                     const sections = document.querySelectorAll('.tabs');
@@ -397,74 +477,312 @@
                         section.classList.remove('active');
                     });
                     document.getElementById(id).classList.add('active');
+                    localStorage.setItem('activeSection', id);
                 }
+                window.addEventListener('load', function() {
+                    const activeSection = localStorage.getItem('activeSection');
+
+                    if (activeSection) {
+                        showSection(activeSection);
+                    } else {
+                        showSection('1');
+                    }
+                });
+
+
+                // Leave submit alert
+                document.getElementById('leaveForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    this.submit();
+                    alert('Your form has been submitted successfully!');
+
+                });
+
+
+
+
 
 
                 // chart
+                // window.onload = function() {
+
+                //     var chart = new CanvasJS.Chart("chartContainer", {
+                //         theme: "light1",
+                //         animationEnabled: false,
+                //         title: {
+                //             text: "Basic Column Chart"
+                //         },
+                //         data: [{
+                //             // Change type to "bar", "area", "spline", "pie",etc.
+                //             type: "column",
+                //             dataPoints: [{
+                //                     label: "jan",
+                //                     y: 1
+                //                 },
+                //                 {
+                //                     label: "Feb",
+                //                     y: 2
+                //                 },
+                //                 {
+                //                     label: "Mar",
+                //                     y: 3
+                //                 },
+                //                 {
+                //                     label: "Apr",
+                //                     y: 4
+                //                 },
+                //                 {
+                //                     label: "May",
+                //                     y: 5
+                //                 },
+                //                 {
+                //                     label: "jun",
+                //                     y: 6
+                //                 },
+                //                 {
+                //                     label: "jul",
+                //                     y: 7
+                //                 },
+                //                 {
+                //                     label: "aug",
+                //                     y: 8
+                //                 },
+                //                 {
+                //                     label: "sep",
+                //                     y: 9
+                //                 },
+                //                 {
+                //                     label: "oct",
+                //                     y: 10
+                //                 },
+                //                 {
+                //                     label: "nov",
+                //                     y: 11
+                //                 },
+                //                 {
+                //                     label: "dec",
+                //                     y: 
+                //                 },
+                //             ]
+                //         }]
+                //     });
+                //     chart.render();
+
+                // }
+
                 window.onload = function() {
+                    var chartData = @json($chartData);
 
                     var chart = new CanvasJS.Chart("chartContainer", {
-                        theme: "light1", // "light2", "dark1", "dark2"
-                        animationEnabled: false, // change to true		
+                        theme: "light1",
+                        animationEnabled: false,
                         title: {
-                            text: "Basic Column Chart"
+                            text: "Total Used Leave per Month"
                         },
                         data: [{
-                            // Change type to "bar", "area", "spline", "pie",etc.
                             type: "column",
-                            dataPoints: [{
-                                    label: "jan",
-                                    y: 1
-                                },
-                                {
-                                    label: "Feb",
-                                    y: 5
-                                },
-                                {
-                                    label: "Mar",
-                                    y: 2
-                                },
-                                {
-                                    label: "Apr",
-                                    y: 0
-                                },
-                                {
-                                    label: "May",
-                                    y: 2
-                                },
-                                {
-                                    label: "jun",
-                                    y: 1
-                                },
-                                {
-                                    label: "jul",
-                                    y: 1
-                                },
-                                {
-                                    label: "aug",
-                                    y: 2
-                                },
-                                {
-                                    label: "sep",
-                                    y: 3
-                                },
-                                {
-                                    label: "oct",
-                                    y: 2
-                                },
-                                {
-                                    label: "nov",
-                                    y: 3
-                                },
-                                {
-                                    label: "dec",
-                                    y: 2
-                                },
-                            ]
+                            dataPoints: chartData
                         }]
                     });
                     chart.render();
-
                 }
+
+                // var ctx = document.getElementById('chart').getcontext('2d');
+                // var userChart = new Chart(ctx,{
+                //     type:'bar',
+                //     data:{
+
+                //     }
+                // })
             </script>
+
+            <script>
+                document.getElementById('application_type').addEventListener('change', function() {
+                    const selectedValue = encodeURIComponent(this.value);
+                    const heading = this.value;
+                    const d = new Date();
+                    let year = d.getFullYear();
+                    const heading1 = heading.concat(" for ", year)
+                    // console.log(heading1);
+                    let isUser = {!! json_encode(session('isUser')) !!};
+
+                    $.ajax({
+                        url: 'application-type/' + selectedValue + '/' + isUser,
+                        // console.lg(url)
+                        method: 'GET',
+                        success: function(response) {
+                            // console.log(selectedValue);
+                            document.getElementById('txt_heading').textContent = heading1
+                            document.getElementById('txt_balance').textContent = response.total_balance
+                            document.getElementById('txt_avail_date').textContent = response.total_avail_date
+                            document.getElementById('txt_total_applied').textContent = response.total_applied
+                            document.getElementById('txt_total_approved').textContent = response.total_approved
+                            document.getElementById('txt_pending').textContent = response.total_pending
+                        }
+                    });
+                })
+            </script>
+
+            {{-- pie chart --}}
+
+            {{-- <script>
+                // Initialize Sick Leave Chart
+                var slCtx = document.getElementById('slChart').getContext('2d');
+                var slChart = new Chart(slCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Availed', 'Balance'],
+                        datasets: [{
+                            data: [{{ $leaveData['availed_sick_leave'] }}, {{ $leaveData['total_sick_leave'] - $leaveData['availed_sick_leave'] }}], // Dynamic data
+                            backgroundColor: ['orange','green'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            
+                // Initialize Earned Leave Chart
+                var elCtx = document.getElementById('elChart').getContext('2d');
+                var elChart = new Chart(elCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Availed', 'Balance'],
+                        datasets: [{
+                            data: [{{ $leaveData['availed_earned_leave'] }}, {{ $leaveData['total_earned_leave'] - $leaveData['availed_earned_leave'] }}], // Dynamic data
+                            backgroundColor: ['orange','green'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            
+                // Initialize Restricted Holiday Chart
+                var rhCtx = document.getElementById('rhChart').getContext('2d');
+                var rhChart = new Chart(rhCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Availed', 'Balance'],
+                        datasets: [{
+                            data: [{{ $leaveData['availed_rh_leave'] }}, {{ $leaveData['total_rh_leave'] - $leaveData['availed_rh_leave'] }}], // Dynamic data
+                            backgroundColor: ['orange','green'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            
+                // Initialize another chart (if needed for chartContainer)
+                var chartData = @json($chartData); // Pass dynamic chart data
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    theme: "light1",
+                    animationEnabled: false,
+                    title: {
+                        text: "Total Used Leave per Month"
+                    },
+                    data: [{
+                        type: "column",
+                        dataPoints: chartData
+                    }]
+                });
+                chart.render();
+            </script> --}}
+            <script>
+                // Custom plugin to display text in the center of the doughnut chart
+                const centerTextPlugin = {
+                    id: 'centerText',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.ctx;
+                        const dataset = chart.data.datasets[0];
+                        const used = dataset.data[0]; // Used leaves
+                        const total = used + dataset.data[1]; // Total leaves
+            
+                        ctx.save();
+                        ctx.font = 'bold 16px Arial'; // Set font size and family
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = 'black'; // Set the color of the text
+                        ctx.fillText(`${used}/${total}`, chart.width / 2, chart.height / 2); // Center the text
+                        ctx.restore();
+                    }
+                };
+            
+                // Register the custom plugin
+                Chart.register(centerTextPlugin);
+            
+                // Initialize Sick Leave Chart
+                var slCtx = document.getElementById('slChart').getContext('2d');
+                var slChart = new Chart(slCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Availed', 'Balance'],
+                        datasets: [{
+                            data: [{{ $leaveData['availed_sick_leave'] }}, {{ $leaveData['total_sick_leave'] - $leaveData['availed_sick_leave'] }}], // Dynamic data
+                            backgroundColor: ['orange','green'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            
+                // Initialize Earned Leave Chart
+                var elCtx = document.getElementById('elChart').getContext('2d');
+                var elChart = new Chart(elCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Availed', 'Balance'],
+                        datasets: [{
+                            data: [{{ $leaveData['availed_earned_leave'] }}, {{ $leaveData['total_earned_leave'] - $leaveData['availed_earned_leave'] }}], // Dynamic data
+                            backgroundColor: ['orange','green'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            
+                // Initialize Restricted Holiday Chart
+                var rhCtx = document.getElementById('rhChart').getContext('2d');
+                var rhChart = new Chart(rhCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Availed', 'Balance'],
+                        datasets: [{
+                            data: [{{ $leaveData['availed_rh_leave'] }}, {{ $leaveData['total_rh_leave'] - $leaveData['availed_rh_leave'] }}], // Dynamic data
+                            backgroundColor: ['orange','green'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            
+                // Initialize another chart (if needed for chartContainer)
+                var chartData = @json($chartData); // Pass dynamic chart data
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    theme: "light1",
+                    animationEnabled: false,
+                    title: {
+                        text: "Total Used Leave per Month"
+                    },
+                    data: [{
+                        type: "column",
+                        dataPoints: chartData
+                    }]
+                });
+                chart.render();
+            </script>
+            
+            
+            
+        
         @endsection

@@ -20,9 +20,7 @@ class SignUpController extends Controller
         // Handle the registration form submission
     public function register(Request $request)
     {
-        // dd($request->request);
         $vaildation = $request->validate([
-            'profileimage' => 'nullable|max:255',
             'fullName' => 'required|max:255',
             'email' => 'required|max:255',
             'password' => 'required|max:255',
@@ -30,6 +28,20 @@ class SignUpController extends Controller
             'role' => 'required|max:255',
             'termsCheck' => 'required|max:255',
         ]);
+        
+        $file = $request->file('profileimage'); //get files
+        if(null !== $file){
+            $folderPath = public_path('image/profile');
+            if(!file_exists($folderPath)){
+                mkdir($folderPath, 0777, true); // where 0777 is permission
+            }
+            $imageName = $file->getClientOriginalName();
+            $imagePath = public_path('image/profile').$imageName;
+            if(!file_exists($imagePath)){
+                $file->move(public_path('image/profile/'),$imageName);
+            }
+            
+        }
 
         if($vaildation['email']){
             $getUser = DB::table('users')->where('email', $vaildation['email'])->first();
@@ -43,7 +55,7 @@ class SignUpController extends Controller
         }
 
         $array = [
-            'profileimage' => $vaildation['profileimage'],
+            'profileimage' => $imageName ?? '',
             'fullName' => $vaildation['fullName'],
             'email' => $vaildation['email'],
             'password' => $vaildation['password'],
@@ -51,6 +63,8 @@ class SignUpController extends Controller
             'role' => $vaildation['role'],
             'termsCheck' => $vaildation['termsCheck'],
         ];
+
+        // dd($array);
 
         try {
             $leave = Signup::register($array);
@@ -62,5 +76,63 @@ class SignUpController extends Controller
 
 
     }
+
+    public function editProfile(){
+        $data['profile'] = DB::table('users')->where('id',session('isUser'))->first();
+        $data['action'] = route('catalog.updateProfie');
+        return view('catalog.form.profile',$data);
+
+    }
+
+    public function updateProfie(Request $request){
+        $data = $request->request;
+        $user_id = session('isUser');
+
+        $vaildation = $request->validate([
+            'fullName' => 'required|max:255'
+        ]);
+
+        try{
+            // update image
+            $file = $request->file('profileimage'); //get files
+            if(null !== $file){
+                $folderPath = public_path('image/profile');
+                if(!file_exists($folderPath)){
+                    mkdir($folderPath, 0777, true); // where 0777 is permission
+                }
+                $imageName = $file->getClientOriginalName();
+                $imagePath = public_path('image/profile').$imageName;
+                if(!file_exists($imagePath)){
+                    $file->move(public_path('image/profile/'),$imageName);
+                }
+            }
+
+            $profile = DB::table('users')->where('id', $user_id)->first();
+            if($profile){
+                $updateData = [
+                    'fullName' => $data->get('fullName')
+                ];
+                // Conditionally add the profile image if it exists
+                if (isset($file)) {
+                    $updateData['profileimage'] = $imageName;
+                }
+
+                DB::table('users')->where('id', $user_id)->update($updateData);
+            }
+
+            $request->session()->put('userImage' , $imageName);
+
+            return redirect()->route('catalog.editProfile');
+        
+        }catch(Exception $e){
+            dd($e->getMessage());
+        }
+        
+    }
+
+
+    // public function assignLeaveToUser(){
+    //     $userData = DB::table('users')->where('id', $userId)->get();
+    // }
 
 }

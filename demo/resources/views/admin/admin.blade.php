@@ -48,7 +48,7 @@
                             <li><a href="javascript:void(0)" onclick="showSection('1')">User Details</a></li>
                             <li><a href="javascript:void(0)" onclick="showSection('2')">Manager Details</a></li>
                         </ul>
-                    </aside>  
+                    </aside>
                 </div>
                 <div class="col-12 col-sm-10 col-md-10">
                     <div class="container" id="contentArea">
@@ -118,20 +118,37 @@
                                                     @if ($item['role'] === 'user')
                                                         <tr class="fontsize text-center">
                                                             <td class="col-2">{{ $item['emp_id'] }}</td>
-                                                            <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_apply_date'])) ?? '' }}</td>
-                                                            <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_date_from'])) ?? ''}}</td>
-                                                            <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_date_to'])) ?? '' }}</td>
-                                                            <td class="col-2">{{ $item['leave_day']?? '' }}</td>
+                                                            <td class="col-2">
+                                                                {{ date('d-m-Y', strtotime($item['leave_apply_date'])) ?? '' }}
+                                                            </td>
+                                                            <td class="col-2">
+                                                                {{ date('d-m-Y', strtotime($item['leave_date_from'])) ?? '' }}
+                                                            </td>
+                                                            <td class="col-2">
+                                                                {{ date('d-m-Y', strtotime($item['leave_date_to'])) ?? '' }}
+                                                            </td>
+                                                            <td class="col-2">{{ $item['leave_day'] ?? '' }}</td>
                                                             <td class="col-2">{{ $item['leave_type'] ?? '' }}</td>
                                                             <td class="col-2">{{ $item['emp_name'] ?? '' }}</td>
                                                             <td class="col-2">{{ session('userName') ?? '' }}</td>
                                                             <td class="col-2">
                                                                 @if ($item['approvel_status'] == 'Approved')
-                                                                    <span class="text-success">{{ $item['approvel_status'] }}</span>
+                                                                    <span
+                                                                        class="text-success">{{ $item['approvel_status'] }}</span>
                                                                 @elseif ($item['approvel_status'] == 'Unapproved')
-                                                                    <span class="text-warning">{{ $item['approvel_status'] }}</span>
+                                                                    <span
+                                                                        class="text-warning">{{ $item['approvel_status'] }}</span>
                                                                 @elseif ($item['approvel_status'] == 'Rejected')
-                                                                    <span class="text-danger">{{ $item['approvel_status'] }}</span>
+                                                                    <span
+                                                                        class="text-danger">{{ $item['approvel_status'] }}</span>
+                                                                @endif
+
+                                                                @if ($item['leaveread'] == 'R')
+                                                                    <span
+                                                                        class="text-success">{{ $item['leaveread'] }}</span>
+                                                                @else
+                                                                    <span
+                                                                        class="text-danger">{{ $item['leaveread'] }}</span>
                                                                 @endif
                                                             </td>
                                                             <td class="col-2">Regular</td>
@@ -142,11 +159,15 @@
                                                                     $approved = 1;
                                                                     $rejected = 2;
                                                                 @endphp
-                                                                <a href="{{ route('admin.approvel', ['status' => $approved, 'leave_form_id' => $item['leave_form_id']]) }}">Approved</a>
-                                                                <a href="{{ route('admin.approvel', ['status' => $unapproved, 'leave_form_id' => $item['leave_form_id']]) }}">Disapproved</a>
-                                                                <a href="{{ route('admin.approvel', ['status' => $rejected, 'leave_form_id' => $item['leave_form_id']]) }}">Rejected</a>
+                                                                <a
+                                                                    href="{{ route('admin.approvel', ['status' => $approved, 'leave_form_id' => $item['leave_form_id']]) }}">Approved</a>
+                                                                <a
+                                                                    href="{{ route('admin.approvel', ['status' => $unapproved, 'leave_form_id' => $item['leave_form_id']]) }}">Disapproved</a>
+                                                                <a
+                                                                    href="{{ route('admin.approvel', ['status' => $rejected, 'leave_form_id' => $item['leave_form_id']]) }}">Rejected</a>
+
                                                             </td>
-                                                        </tr>                                                  
+                                                        </tr>
                                                     @endif
                                                 @endforeach
 
@@ -222,20 +243,37 @@
                                                     @if ($item['role'] === 'manager')
                                                         <tr class="fontsize text-center">
                                                             <td class="col-2">{{ $item['emp_id'] }}</td>
-                                                            <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_apply_date'])) ?? '' }}</td>
-                                                            <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_date_from'])) ?? ''}}</td>
-                                                            <td class="col-2">{{ date('d-m-Y', strtotime($item['leave_date_to'])) ?? '' }}</td>
-                                                            <td class="col-2">{{ $item['leave_day']?? '' }}</td>
+                                                            <td class="col-2">
+                                                                {{ date('d-m-Y', strtotime($item['leave_apply_date'])) ?? '' }}
+                                                            </td>
+                                                            <td class="col-2">
+                                                                {{ date('d-m-Y', strtotime($item['leave_date_from'])) ?? '' }}
+                                                            </td>
+                                                            <td class="col-2">
+                                                                {{ date('d-m-Y', strtotime($item['leave_date_to'])) ?? '' }}
+                                                            </td>
+                                                            <td class="col-2">{{ $item['leave_day'] ?? '' }}</td>
                                                             <td class="col-2">{{ $item['leave_type'] ?? '' }}</td>
                                                             <td class="col-2">{{ $item['emp_name'] ?? '' }}</td>
                                                             <td class="col-2">{{ session('userName') ?? '' }}</td>
                                                             <td class="col-2">
                                                                 @if ($item['approvel_status'] == 'Approved')
-                                                                    <span class="text-success">{{ $item['approvel_status'] }}</span>
+                                                                    <span
+                                                                        class="text-success">{{ $item['approvel_status'] }}</span>
                                                                 @elseif ($item['approvel_status'] == 'Unapproved')
-                                                                    <span class="text-warning">{{ $item['approvel_status'] }}</span>
+                                                                    <span
+                                                                        class="text-warning">{{ $item['approvel_status'] }}</span>
                                                                 @elseif ($item['approvel_status'] == 'Rejected')
-                                                                    <span class="text-danger">{{ $item['approvel_status'] }}</span>
+                                                                    <span
+                                                                        class="text-danger">{{ $item['approvel_status'] }}</span>
+                                                                @endif
+
+                                                                @if ($item['leaveread'] == 'R')
+                                                                    <span
+                                                                        class="text-success">{{ $item['leaveread'] }}</span>
+                                                                @else
+                                                                    <span
+                                                                        class="text-danger">{{ $item['leaveread'] }}</span>
                                                                 @endif
                                                             </td>
                                                             <td class="col-2">Regular</td>
@@ -246,9 +284,12 @@
                                                                     $approved = 1;
                                                                     $rejected = 2;
                                                                 @endphp
-                                                                <a href="{{ route('admin.approvel', ['status' => $approved, 'leave_form_id' => $item['leave_form_id']]) }}">Approved</a>
-                                                                <a href="{{ route('admin.approvel', ['status' => $unapproved, 'leave_form_id' => $item['leave_form_id']]) }}">Disapproved</a>
-                                                                <a href="{{ route('admin.approvel', ['status' => $rejected, 'leave_form_id' => $item['leave_form_id']]) }}">Rejected</a>
+                                                                <a
+                                                                    href="{{ route('admin.approvel', ['status' => $approved, 'leave_form_id' => $item['leave_form_id']]) }}">Approved</a>
+                                                                <a
+                                                                    href="{{ route('admin.approvel', ['status' => $unapproved, 'leave_form_id' => $item['leave_form_id']]) }}">Disapproved</a>
+                                                                <a
+                                                                    href="{{ route('admin.approvel', ['status' => $rejected, 'leave_form_id' => $item['leave_form_id']]) }}">Rejected</a>
                                                             </td>
                                                         </tr>
                                                     @endif
@@ -271,7 +312,17 @@
                         section.classList.remove('active');
                     });
                     document.getElementById(id).classList.add('active');
+                    localStorage.setItem('activeSection', id);
                 }
+                window.addEventListener('load', function() {
+                    const activeSection = localStorage.getItem('activeSection');
+
+                    if (activeSection) {
+                        showSection(activeSection);
+                    } else {
+                        showSection('1');
+                    }
+                });
 
 
                 // chart

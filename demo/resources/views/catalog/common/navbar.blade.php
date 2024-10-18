@@ -19,6 +19,16 @@
     .dropdown-menu {
         left: -123px !important;
     }
+
+    .nav-link:hover {
+        background-color: white;
+        color: black !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dropdown-item:hover{
+        background-color: rgb(98, 98, 254);
+    }
 </style>
 <nav class="navbar navbar-expand-lg text-light bg-dark">
     <div class="container-fluid">
@@ -36,19 +46,16 @@
                         href="{{ route('catalog.home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="#">Services</a>
+                    <a class="nav-link text-light" href="{{ route('catalog.about') }}">About</a>
                 </li>
                 <li class="nav-item">
                     @if (session('isUser'))
-                    {{-- {{ dd(session('isUser')); }} --}}
+                        {{-- {{ dd(session('isUser')); }} --}}
                         <div class="dropdown">
                             @if (null != session('userImage'))
                                 <img height="30" class="profile_picture dropdown-toggle" width="30"
                                     data-bs-toggle="dropdown" aria-expanded="false"
-                                    src="{{ session('userImage') ?? URL::asset('image/team1-consultancy1.png') }}"
+                                    src="{{ session('userImage') ? URL::asset('image/profile/' . session('userImage')) : '' }}"
                                     alt="">
                             @else
                                 <p class="mb-0 profile_picture ms-2 dropdown-toggle" data-bs-toggle="dropdown"
@@ -56,6 +63,7 @@
                             @endif
 
                             <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('catalog.editProfile') }}">Profile</a></li>
                                 <li><a class="dropdown-item" href="{{ route('catalog.logout') }}">Logout</a></li>
                             </ul>
                         </div>

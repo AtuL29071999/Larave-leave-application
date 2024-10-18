@@ -24,12 +24,9 @@ class LeaveForm extends Model
         'leave_manager_email',
         'leave_cc_email',
         'leave_contact_no',
-        'leave_contact_address1',
-        'leave_contact_address2',
-        'leave_contact_address3',
-        'leave_city',
-        'leave_pincode',
         'leave_medical_certificate',
+        'read',
+        'status',
         'user_id'
     ];
 
@@ -54,14 +51,11 @@ class LeaveForm extends Model
             'leave_manager_email' => $array['leave_manager_email'] ?? null,
             'leave_cc_email' => $array['leave_cc_email'] ?? null,
             'leave_contact_no' => $array['leave_contact_no'] ?? null,
-            'leave_contact_address1' => $array['leave_contact_address1'],
-            'leave_contact_address2' => $array['leave_contact_address2'],
-            'leave_contact_address3' => $array['leave_contact_address3'],
-            'leave_city' => $array['leave_city'] ?? null,
-            'leave_pincode' => $array['leave_pincode'] ?? null,
             'leave_medical_certificate' => $array['leave_medical_certificate'] ?? null,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
+            'read' => 0,
+            'status' => 0,
         ]);
 
         if($result){
@@ -86,11 +80,6 @@ class LeaveForm extends Model
             'leave_manager_email' => $array['leave_manager_email'] ?? null,
             'leave_cc_email' => $array['leave_cc_email'] ?? null,
             'leave_contact_no' => $array['leave_contact_no'] ?? null,
-            'leave_contact_address1' => $array['leave_contact_address1'] ?? null,
-            'leave_contact_address2' => $array['leave_contact_address2'] ?? null,
-            'leave_contact_address3' => $array['leave_contact_address3'] ?? null,
-            'leave_city' => $array['leave_city'] ?? null,
-            'leave_pincode' => $array['leave_pincode'] ?? null,
             'leave_medical_certificate' => $array['leave_medical_certificate'] ?? null,
             'updated_at' => now()
         ]);
